@@ -1,0 +1,31 @@
+{
+  "name": "back-end-gf",
+  "version": "1.0.0",
+  "description": "API para controle de investimentos (CRUD + Swagger + SQLite)",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "echo \"No tests configured\" && exit 0"
+  },
+  "keywords": [
+    "investimentos",
+    "api",
+    "express",
+    "sqlite",
+    "swagger"
+  ],
+  "author": "Igor Rafael",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "express-validator": "^7.2.1",
+    "sqlite3": "^5.1.7",
+    "swagger-ui-express": "^5.0.1",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

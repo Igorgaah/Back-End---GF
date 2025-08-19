@@ -1,0 +1,91 @@
+openapi: 3.0.3
+info:
+  title: Controle de Investimentos API
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+
+paths:
+  /api/investments:
+    get:
+      summary: Listar investimentos
+      responses:
+        '200':
+          description: OK
+
+    post:
+      summary: Criar investimento
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, type, amount, date]
+              properties:
+                name:
+                  type: string
+                type:
+                  type: string
+                  enum: [Ação, Fundo, Título, Outro]
+                amount:
+                  type: number
+                  minimum: 0.01
+                date:
+                  type: string
+                  format: date
+      responses:
+        '201':
+          description: Criado
+        '400':
+          description: Erro de validação
+
+  /api/investments/{id}:
+    put:
+      summary: Atualizar investimento
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                type:
+                  type: string
+                  enum: [Ação, Fundo, Título, Outro]
+                amount:
+                  type: number
+                  minimum: 0.01
+                date:
+                  type: string
+                  format: date
+      responses:
+        '200':
+          description: Atualizado
+        '400':
+          description: Erro de validação
+        '404':
+          description: Não encontrado
+
+    delete:
+      summary: Excluir investimento
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '204':
+          description: Excluído
+        '404':
+          description: Não encontrado
