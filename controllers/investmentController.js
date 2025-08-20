@@ -9,15 +9,6 @@ async function list(req, res, next) {
   }
 }
 
-async function create(req, res, next) {
-  try {
-    const created = await service.create(req.body);
-    res.status(201).json(created);
-  } catch (err) {
-    next(err);
-  }
-}
-
 async function getById(req, res, next) {
   try {
     const { id } = req.params;
@@ -31,8 +22,14 @@ async function getById(req, res, next) {
   }
 }
 
-module.exports = { list, create, update, remove, distribution, getById };
-
+async function create(req, res, next) {
+  try {
+    const created = await service.create(req.body);
+    res.status(201).json(created);
+  } catch (err) {
+    next(err);
+  }
+}
 
 async function update(req, res, next) {
   try {
@@ -69,4 +66,4 @@ async function distribution(req, res, next) {
   }
 }
 
-module.exports = { list, create, update, remove, distribution };
+module.exports = { list, getById, create, update, remove, distribution };

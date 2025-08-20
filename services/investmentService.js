@@ -2,19 +2,24 @@ const supabase = require('../supabaseClient');
 
 // LISTA todos investimentos
 async function list() {
-  const { data, error } = await supabase.from('investments').select('*').order('created_at', { ascending: false });
+  const { data, error } = await supabase
+    .from('investments')
+    .select('*')
+    .order('created_at', { ascending: false });
   if (error) throw new Error(error.message);
   return data;
 }
 
 // BUSCA investimento por ID
 async function getById(id) {
-  const result = await db.query('SELECT * FROM investments WHERE id = $1', [id]);
-  return result.rows[0] || null;
+  const { data, error } = await supabase
+    .from('investments')
+    .select('*')
+    .eq('id', id)
+    .single(); // retorna apenas um registro
+  if (error) throw new Error(error.message);
+  return data;
 }
-
-module.exports = { list, create, update, remove, typeDistribution, getById };
-
 
 // CRIA novo investimento
 async function create(obj) {
@@ -71,4 +76,5 @@ async function typeDistribution() {
   return Object.entries(result).map(([type, count]) => ({ type, count }));
 }
 
-module.exports = { list, create, update, remove, typeDistribution };
+// Exporta todas as funções
+module.exports = { list, getById, create, update, remove, typeDistribution };
