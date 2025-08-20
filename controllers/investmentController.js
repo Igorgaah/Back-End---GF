@@ -18,6 +18,22 @@ async function create(req, res, next) {
   }
 }
 
+async function getById(req, res, next) {
+  try {
+    const { id } = req.params;
+    const investment = await service.getById(id);
+    if (!investment) {
+      return res.status(404).json({ error: 'Investimento não encontrado' });
+    }
+    res.json(investment);
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { list, create, update, remove, distribution, getById };
+
+
 async function update(req, res, next) {
   try {
     const { id } = req.params;

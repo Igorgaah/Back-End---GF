@@ -14,6 +14,7 @@ app.use(cors()); // <-- HABILITA CORS PARA TODAS AS ROTAS E ORIGENS
 
 // Rotas principais
 app.get('/investments', investmentController.list);
+app.get('/investments/:id', investmentController.getById);
 app.post('/investments', createRules, validate, investmentController.create);
 app.put('/investments/:id', createRules, validate, investmentController.update);
 app.delete('/investments/:id', investmentController.remove);

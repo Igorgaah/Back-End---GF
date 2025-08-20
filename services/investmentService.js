@@ -7,6 +7,15 @@ async function list() {
   return data;
 }
 
+// BUSCA investimento por ID
+async function getById(id) {
+  const result = await db.query('SELECT * FROM investments WHERE id = $1', [id]);
+  return result.rows[0] || null;
+}
+
+module.exports = { list, create, update, remove, typeDistribution, getById };
+
+
 // CRIA novo investimento
 async function create(obj) {
   const { name, type, amount, investment_date } = obj;
