@@ -7,13 +7,18 @@ servers:
   - url: http://localhost:3000
 
 paths:
-  /api/investments:
+  /investments:
     get:
       summary: Listar investimentos
       responses:
         '200':
           description: OK
-
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Investment'
     post:
       summary: Criar investimento
       requestBody:
@@ -21,60 +26,56 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required: [name, type, amount, date]
-              properties:
-                name:
-                  type: string
-                type:
-                  type: string
-                  enum: [Ação, Fundo, Título, Outro]
-                amount:
-                  type: number
-                  minimum: 0.01
-                date:
-                  type: string
-                  format: date
+              $ref: '#/components/schemas/InvestmentInput'
       responses:
         '201':
           description: Criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Investment'
         '400':
           description: Erro de validação
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-  /api/investments/{id}:
+  /investments/{id}:
     put:
       summary: Atualizar investimento
       parameters:
         - in: path
           name: id
           schema:
-            type: integer
+            type: string
           required: true
+          description: UUID do investimento
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                type:
-                  type: string
-                  enum: [Ação, Fundo, Título, Outro]
-                amount:
-                  type: number
-                  minimum: 0.01
-                date:
-                  type: string
-                  format: date
+              $ref: '#/components/schemas/InvestmentInput'
       responses:
         '200':
           description: Atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Investment'
         '400':
           description: Erro de validação
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '404':
           description: Não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
     delete:
       summary: Excluir investimento
@@ -82,10 +83,69 @@ paths:
         - in: path
           name: id
           schema:
-            type: integer
+            type: string
           required: true
+          description: UUID do investimento
       responses:
         '204':
           description: Excluído
         '404':
           description: Não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /investments/types/distribution:
+    get:
+      summary: Distribuição por tipo de investimento
+      description: Retorna a quantidade de investimentos de cada tipo
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DistributionResult'
+
+components:
+  schemas:
+    InvestmentInput:
+      type: object
+      required: [name, type, amount, investment_date]
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: [Ações, Renda Fixa, Fundos, Criptomoedas, Imóveis, Commodities, Outros]
+        amount:
+          type: number
+          minimum: 0.01
+        investment_date:
+          type: string
+          format: date
+    Investment:
+      allOf:
+        - $ref: '#/components/schemas/InvestmentInput'
+        - type: object
+          properties:
+            id:
+              type: string
+            created_at:
+              type: string
+              format: date-time
+    DistributionResult:
+      type: object
+      properties:
+        type:
+          type: string
+        count:
+          type: integer
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
